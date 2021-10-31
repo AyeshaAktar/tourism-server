@@ -70,6 +70,21 @@ async function run() {
       const booking = await cursor.toArray();
       res.send(booking);
     });
+    //DELETE API
+    app.delete("/DeleteBookings/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await bookingCollection.deleteOne(query);
+      res.json(result);
+    });
+
+    app.get("/orderEmail", (req, res) => {
+      bookingCollection
+        .find({ email: req.query.email })
+        .toArray((err, documents) => {
+          res.send(documents);
+        });
+    });
   } finally {
     // await client.close()
   }
