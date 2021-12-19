@@ -28,6 +28,7 @@ async function run() {
     const database = client.db("tourism");
     const campingsCollection = database.collection("campings");
     const bookingCollection = database.collection("booking");
+    const reviewCollection = database.collection("reviews");
 
     //GET API
     app.get("/campings", async (req, res) => {
@@ -76,6 +77,22 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const result = await bookingCollection.deleteOne(query);
       res.json(result);
+    });
+
+    //Review POST API
+    app.post("/reviews", async (req, res) => {
+      const review = req.body;
+
+      const result = await reviewCollection.insertOne(review);
+      // console.log(result);
+      res.json(result);
+    });
+
+    //Review Get API
+    app.get("/reviews", async (req, res) => {
+      const cursor = reviewCollection.find({});
+      const review = await cursor.toArray();
+      res.send(review);
     });
 
     app.get("/orderEmail", (req, res) => {
